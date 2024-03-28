@@ -28,15 +28,13 @@ class User
         $this->email = htmlspecialchars(strip_tags($this->email));
         $this->password = htmlspecialchars(strip_tags($this->password));
 
-        // Привязываем значения
+        // Привязывание значения
         $stmt->bindParam(":email", $this->email);
 
-        // Для защиты пароля
-        // Хешируем пароль перед сохранением в базу данных
+        // Хеширование пароля перед сохранением в базу данных
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
         $stmt->bindParam(":password", $password_hash);
 
-        // Выполняем запрос
         // Если выполнение успешно, то информация о пользователе будет сохранена в базе данных
         if ($stmt->execute()) {
             return true;
@@ -59,33 +57,26 @@ class User
         // Инъекция
         $this->email=htmlspecialchars(strip_tags($this->email));
 
-        // Привязываем значение e-mail
+        // Привязка значения e-mail
         $stmt->bindParam(1, $this->email);
 
-        // Выполняем запрос
         $stmt->execute();
 
-        // Получаем количество строк
         $num = $stmt->rowCount();
 
         // Если электронная почта существует,
-        // Присвоим значения свойствам объекта для легкого доступа и использования для php сессий
+        // Присвоение значения свойствам объекта для доступа и использования для php сессий
         if ($num > 0) {
 
-            // Получаем значения
+            // Получение значения
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Присвоим значения свойствам объекта
             $this->id = $row["id"];
             $this->password = $row["password"];
 
-            // Вернём "true", потому что в базе данных существует электронная почта
             return true;
         }
 
-        // Вернём "false", если адрес электронной почты не существует в базе данных
         return false;
     }
-
-// Здесь будет метод update()
 }
