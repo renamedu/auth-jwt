@@ -17,7 +17,8 @@ include_once "./api/libs/php-jwt/Key.php";
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
 
-function feed($key) {
+function feed() {
+    $key = "individual_key";
     // Get JSON data from the request
     $data = json_decode(file_get_contents("php://input"));
 
@@ -34,11 +35,8 @@ function feed($key) {
 
         // If an exception is caught (e.g., token is invalid), set the HTTP response code to 401 (Unauthorized) and error message
         http_response_code(401);
-        echo json_encode(array(
+        return array(
             "error" => "unauthorized",
-        ));
+        );
     }
 }
-
-feed($key);
-
